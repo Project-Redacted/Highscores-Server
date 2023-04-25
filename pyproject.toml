@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "highscores-server"
+version = "0.1.0"
+description = "Server (and website) to store and display Highscores of the players who completed the game"
+authors = ["Fluffy-Bean <michal-gdula@protonmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "highscores_server"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Flask = "^2.2.3"
+Flask-SQLAlchemy = "^3.0.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
