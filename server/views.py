@@ -43,7 +43,7 @@ def index():
 def post():
     form = ScoreForm()
 
-    if form.validate_on_submit():
+    if form:
         score = Scores(
             score=form.score.data,
             difficulty=form.difficulty.data,
@@ -55,7 +55,6 @@ def post():
 
     return render_template_string('''
         <form method="POST" action="/post">
-            {{ form.csrf_token }}
             {{ form.score.label }} {{ form.score(size=20) }}
             {{ form.difficulty.label }} {{ form.difficulty(size=20) }}
             {{ form.achievements.label }} {{ form.achievements(size=20) }}
