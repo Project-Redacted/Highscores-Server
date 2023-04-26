@@ -15,6 +15,7 @@ class Scores(db.Model):
     score = db.Column(db.Integer, nullable=False)
     difficulty = db.Column(db.String, nullable=False)
     achievements = db.Column(db.String, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     scored_at = db.Column(
         db.DateTime,
@@ -32,6 +33,8 @@ class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     steam_uuid = db.Column(db.String, unique=True, nullable=False)
     steam_name = db.Column(db.String, nullable=False)
+
+    scores = db.relationship('Scores', backref='user', lazy=True)
 
     creation_data = db.Column(
         db.DateTime,

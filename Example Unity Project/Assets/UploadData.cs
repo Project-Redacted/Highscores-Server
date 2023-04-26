@@ -13,6 +13,8 @@ public class UploadData : MonoBehaviour
     public string url = "http://127.0.0.1:5000/post";
     
     // Set the field variables we'll need to use later
+    public TMP_InputField nameField;
+    public TMP_InputField idField;
     public TMP_InputField scoreField;
     public TMP_InputField difficultyField;
     public TMP_InputField achievementsField;
@@ -30,9 +32,13 @@ public class UploadData : MonoBehaviour
     public void SubmitForm()
     {
         // Check that the important fields are filled in
-        if (scoreField.text == "" || difficultyField.text == "")
+        if (nameField.text == "" ||
+            idField.text == "" ||
+            scoreField.text == "" ||
+            difficultyField.text == "" ||
+            achievementsField.text == "")
         {
-            responseText.text = "Score and Difficulty are required";
+            responseText.text = "Fill in all fields!";
             return;
         }
         
@@ -42,21 +48,27 @@ public class UploadData : MonoBehaviour
     IEnumerator Upload()
     {
         WWWForm form = new WWWForm();
+        form.AddField("playerName", nameField.text);
+        form.AddField("playerId", idField.text);
         form.AddField("score", scoreField.text);
         form.AddField("difficulty", difficultyField.text);
         form.AddField("achievements", achievementsField.text);
+        
+        UnityWebRequest www = UnityWebRequest.Post(url, form);
+        www.SetRequestHeader("Authentication", "Bearer 1234");
 
-        using (UnityWebRequest www = UnityWebRequest.Post(url, form))
+        using (www)
         {
             yield return www.SendWebRequest();
             
             if (!string.IsNullOrWhiteSpace(www.error))
             {
-                responseText.text = "Error uploading: " + www.error;
+                // Show the error message from the response
+                responseText.text = www.downloadHandler.text;
             }
             else
             {
-                responseText.text = "Upload complete!" + www.error;
+                responseText.text = "Upload complete!";
             }
         }
     }
