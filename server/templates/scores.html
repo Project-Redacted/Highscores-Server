@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if scores %}
+        <table>
+            <tr>
+                <th>Position</th>
+                <th>Player</th>
+                <th>Difficulty</th>
+                <th>Score</th>
+            </tr>
+            {% for score in top_scores %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    {% if score.anonymous %}
+                        <td>{{ score.username }}</td>
+                    {% else %}
+                        <td>{{ score.scorer.username }}</td>
+                    {% endif %}
+                    <td>{{ score.difficulty }}</td>
+                    <td>{{ score.score }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <div class="center-text">
+            <h2>No scores yet</h2>
+            <p>Set some!</p>
+        </div>
+    {% endif %}
+{% endblock %}

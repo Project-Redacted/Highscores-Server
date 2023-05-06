@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Front Rooms Highscores</title>
+    {% assets "styles" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css">
+    {% endassets %}
+</head>
+<body>
+    <img src="{{ url_for("static", filename="bg.png") }}" alt="The Front Rooms pause menu" class="background">
+    <div class="app">
+        <img src="{{ url_for("static", filename="title.png") }}" alt="The Front Rooms logo" class="title">
+        <nav>
+            <a href="{{ url_for('views.index', diff=0) }}" class="button">Level 1</a>
+            <a href="{{ url_for('views.index', diff=1) }}" class="button">Level 2</a>
+            <a href="{{ url_for('views.index', diff=2) }}" class="button">Level 3</a>
+            <a href="{{ url_for('views.index', diff=3) }}" class="button">Normal</a>
+            <a href="{{ url_for('views.index', diff=4) }}" class="button">Hard</a>
+
+            <span></span> <!-- This is a spacer -->
+
+            <a href="{{ url_for('auth.auth') }}" class="button secondary">Login</a>
+        </nav>
+    
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

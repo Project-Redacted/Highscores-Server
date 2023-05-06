@@ -1,4 +1,5 @@
-SECRET_KEY = 'dev'
+SECRET_KEY = "dev"
+BEARER_TOKEN = 1234
 
-SQLALCHEMY_DATABASE_URI = 'sqlite:///db.sqlite'
+SQLALCHEMY_DATABASE_URI = f"sqlite:///db.sqlite"
 SQLALCHEMY_TRACK_MODIFICATIONS = False

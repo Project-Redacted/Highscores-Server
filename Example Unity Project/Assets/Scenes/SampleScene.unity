@@ -2557,7 +2557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63883bd44af96e2d58b01169e5588f2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: http://127.0.0.1:5000/post
+  url: https://expo.leggy.dev/post
   nameField: {fileID: 493760171}
   idField: {fileID: 2029744589}
   scoreField: {fileID: 2046180429}

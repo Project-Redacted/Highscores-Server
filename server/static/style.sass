@@ -1,0 +1,212 @@
+$black: var(--black)
+$white: var(--white)
+$primary: var(--primary)
+$secondary: var(--secondary)
+$gold: var(--gold)
+$silver: var(--silver)
+$bronze: var(--bronze)
+$darkBlue: var(--darkBlue)
+
+@mixin button($color)
+	text-decoration: none
+	background-color: transparent
+	color: RGB($color)
+	border-radius: 2px
+	// box-shadow: 0 0 0 0 RGBA($color, 0)
+	transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out
+
+	&:hover
+		background-color: RGBA($color, 0.3)
+		transform: translateY(-0.1rem)
+		// box-shadow: 0 0.1rem 0.4rem 0.1rem RGBA($color, 0.2)
+
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&display=swap')
+
+\:root
+	--black: 21, 21, 21
+	--white: 232, 227, 227
+	--primary: 213, 214, 130
+	--secondary: 185, 77, 77
+	--gold: 255, 222, 70
+	--silver: 229, 220, 206
+	--bronze: 193, 145, 69
+	--darkBlue: 9, 9, 39
+
+*
+	box-sizing: border-box
+	font-family: 'Merriweather', serif
+
+html
+	margin: 0
+	padding: 0
+
+body
+	margin: 0
+	padding: 0
+	display: flex
+	flex-direction: row
+	background-color: RGB($darkBlue)
+	color: RGB($white)
+
+.background
+	width: 100%
+	height: 100%
+
+	object-fit: cover
+	position: absolute
+	z-index: 1
+
+.app
+	margin: 0 auto
+	padding: 2rem
+
+	width: 800px
+	min-height: 100vh
+
+	position: relative
+	display: flex
+	flex-direction: column
+
+	background-color: rgba($darkBlue, 0.9)
+	z-index: 2
+
+	> table
+		width: 100%
+
+	.center-text
+		height: 100%
+
+		display: flex
+		flex-direction: column
+		justify-content: center
+		align-items: center
+
+		> h2
+			margin: 0
+			text-align: center
+			font-size: 2em
+			color: RGB($white)
+
+		> p
+			margin: 0
+			text-align: center
+			font-size: 1em
+			color: RGB($white)
+
+	.auth
+		margin: auto 1rem
+		padding: 1rem
+
+		display: flex
+		flex-direction: column
+
+		background-color: rgba($darkBlue, 0.5)
+		border-radius: 2px
+
+		> h2
+			margin: 0 0 1rem 0
+			font-size: 1.3em
+			color: RGB($white)
+
+.title
+	margin-bottom: 2rem
+	width: 100%
+	height: auto
+	text-align: center
+
+.subtitle
+	margin-bottom: 1rem
+	padding: 0
+
+	text-align: center
+	font-weight: bolder
+	font-size: 1.2em
+
+	color: RGB($secondary)
+
+	> span
+		padding: 0 0.1rem
+
+		color: transparent
+		background: RGB($secondary)
+
+nav
+	margin: 0
+	padding: 0
+
+	height: 3rem
+
+	display: flex
+	flex-direction: row
+	justify-content: center
+
+	> span
+		width: 100%
+
+	> a
+		margin: auto 0.25rem
+		padding: 0.5rem 1rem
+
+		text-decoration: none
+		white-space: nowrap
+
+		color: RGB($primary)
+
+		&.button
+			@include button($white)
+
+			&.primary
+				@include button($primary)
+
+			&.secondary
+				@include button($secondary)
+
+form
+	display: flex
+	flex-direction: column
+
+	> input
+		margin: 0 0 1rem 0
+		padding: 0.5rem 1rem
+
+		border: 1px solid RGB($white)
+		border-radius: 2px
+
+		background-color: RGB($darkBlue)
+		color: RGB($white)
+
+		&:focus
+			outline: none
+			border-color: RGB($primary)
+
+		&.error
+			border-color: RGB($secondary)
+
+	> button
+		margin: 0
+		padding: 0.5rem 1rem
+
+		font-weight: bolder
+
+		border: transparent
+		border-radius: 2px
+
+		background-color: RGB($primary)
+		color: RGB($black)
+
+		&:focus-visible, &:hover
+			outline: none
+			background-color: RGBA($primary, 0.3)
+			color: RGB($primary)
+
+		&.disabled
+			pointer-events: none
+			opacity: 0.5
+
+		&.secondary
+			background-color: RGB($secondary)
+			color: RGB($black)
+
+			&:focus-visible, &:hover
+				background-color: RGBA($secondary, 0.3)
+				color: RGB($secondary)

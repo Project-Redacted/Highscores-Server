@@ -1,10 +1,12 @@
-from flask import Blueprint, jsonify, render_template_string, request, abort
+from flask import Blueprint, jsonify, request, render_template
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired
 
-from server.models import Scores, Users
+from server.models import Scores, Users, Tokens
 from server.extensions import db, cache
+from server.config import BEARER_TOKEN
+
 
 blueprint = Blueprint('views', __name__)
 
@@ -17,44 +19,18 @@ class ScoreForm(FlaskForm):
     achievements = StringField('Achievements', validators=[DataRequired()])
 
 
-@blueprint.route('/', methods=['GET'])
+@blueprint.route('/')
 @cache.cached(timeout=60)
 def index():
-    top_scores = Scores.query.order_by(Scores.score.desc()).limit(10).all()
-    users = Users.query.all()
-    return render_template_string('''
-        <h1>Top Scores</h1>
-        <table>
-            <tr>
-                <th>Score</th>
-                <th>Difficulty</th>
-                <th>Achievements</th>
-                <th>Player</th>
-            </tr>
-            {% for score in top_scores %}
-                <tr>
-                    <td>{{ score.score }}</td>
-                    <td>{{ score.difficulty }}</td>
-                    <td>{{ score.achievements }}</td>
-                    <td>{{ score.user.steam_name }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-        
-        <h1>Players</h1>
-        <table>
-            <tr>
-                <th>Steam ID</th>
-                <th>Steam Name</th>
-            </tr>
-            {% for user in users %}
-                <tr>
-                    <td>{{ user.steam_uuid }}</td>
-                    <td>{{ user.steam_name }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-        ''', top_scores=top_scores, users=users)
+    difficulty = request.args.get('diff', 0)
+
+    top_scores = (Scores.query
+                  .order_by(Scores.score.desc())
+                  .filter_by(difficulty=difficulty)
+                  .limit(10)
+                  .all())
+    return render_template('scores.html', top_scores=top_scores)
+
 
 
 @blueprint.route('/post', methods=['POST'])
@@ -63,33 +39,50 @@ def post():
 
     if not form:
         return "Invalid form", 400
-    if request.headers.get('Authentication') != 'Bearer 1234':
+    if not request.headers.get('Authentication'):
         return "Invalid authentication", 401
 
     if not isinstance(form.score.data, int):
         return "Score must be an integer", 400
     if form.score.data < 0:
         return "Score must be greater than 0", 400
-    if form.difficulty.data not in ['easy', 'medium', 'hard']:
+    if form.difficulty.data not in [0, 1, 2, 3, 4]:
+        # 0 = Easy, Level 1
+        # 1 = Easy, Level 2
+        # 2 = Easy, Level 3
+        # 3 = Normal
+        # 4 = Hard
         return "Invalid difficulty", 400
 
-    user = Users.query.filter_by(steam_uuid=form.playerId.data).first()
-    if not user:
-        user = Users(
-            steam_uuid=form.playerId.data,
-            steam_name=form.playerName.data,
+    if request.headers.get('Authentication') == BEARER_TOKEN:
+        # User is not authenticated, but has the correct token
+        # This is an anonymous user
+
+        if not form.playerName.data or len(form.playerId.data) != 4:
+            return "Invalid player name", 400
+
+        score = Scores(
+            anonymous=True,
+            username=form.playerName.data,
+            score=form.score.data,
+            difficulty=form.difficulty.data,
         )
-        db.session.add(user)
+        db.session.add(score)
         db.session.commit()
+        return "Success!", 200
+    elif Tokens.query.filter_by(token=request.headers.get('Authentication')).first():
+        # User is authenticated
+        # This is a registered user
 
-    score = Scores(
-        score=form.score.data,
-        difficulty=form.difficulty.data,
-        achievements=form.achievements.data,
-        user_id=user.id,
-    )
-    db.session.add(score)
-    db.session.commit()
-    return jsonify({'message': 'Success!'})
+        user = Tokens.query.filter_by(token=request.headers.get('Authentication')).first().holder
+        score = Scores(
+            score=form.score.data,
+            difficulty=form.difficulty.data,
+            achievements=form.achievements.data,
+            user_id=user.id,
+        )
+        db.session.add(score)
+        db.session.commit()
+        return "Success!", 200
 
-
+    return "Authentication failed", 401
