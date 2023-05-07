@@ -58,7 +58,7 @@ body
 
 .app
 	margin: 0 auto
-	padding: 2rem
+	padding: 0
 
 	width: 800px
 	min-height: 100vh
@@ -67,11 +67,77 @@ body
 	display: flex
 	flex-direction: column
 
-	background-color: rgba($darkBlue, 0.9)
+	background-color: rgba($darkBlue, 0.7)
 	z-index: 2
 
 	> table
 		width: 100%
+
+header
+	padding: 1rem
+
+	background-color: RGBA($darkBlue, 0.7)
+
+	> img
+		margin-bottom: 2rem
+		width: 100%
+		height: auto
+		text-align: center
+
+	> nav
+		margin: 0
+		padding: 0
+
+		height: 3rem
+
+		display: flex
+		flex-direction: row
+		justify-content: center
+
+		> span
+			width: 100%
+
+		> a
+			margin: auto 0.25rem
+			padding: 0.5rem 1rem
+
+			text-decoration: none
+			white-space: nowrap
+
+			color: RGB($primary)
+
+			&.button
+				@include button($white)
+
+				&.primary
+					@include button($primary)
+
+				&.secondary
+					@include button($secondary)
+
+.flash
+	display: flex
+	flex-direction: column
+	justify-content: center
+	align-items: center
+
+	> p
+		margin: 0.4rem 0 0
+		padding: 0.75rem 1rem
+
+		width: 100%
+		position: relative
+
+		border-left: RGB($secondary) 0.25rem solid
+		background-color: RGB($darkBlue)
+		color: RGB($secondary)
+
+main
+	padding: 1rem
+	height: 100%
+
+	display: flex
+	flex-direction: column
 
 	.center-text
 		height: 100%
@@ -94,13 +160,13 @@ body
 			color: RGB($white)
 
 	.auth
-		margin: auto 1rem
+		margin: auto 0
 		padding: 1rem
 
 		display: flex
 		flex-direction: column
 
-		background-color: rgba($darkBlue, 0.5)
+		background-color: rgba($darkBlue, 0.7)
 		border-radius: 2px
 
 		> h2
@@ -108,105 +174,74 @@ body
 			font-size: 1.3em
 			color: RGB($white)
 
-.title
-	margin-bottom: 2rem
-	width: 100%
-	height: auto
-	text-align: center
+	form
+		display: flex
+		flex-direction: column
 
-.subtitle
-	margin-bottom: 1rem
-	padding: 0
+		> input
+			margin: 0 0 1rem 0
+			padding: 0.75rem 1rem
 
-	text-align: center
-	font-weight: bolder
-	font-size: 1.2em
+			border: 1px solid RGB($white)
+			border-radius: 2px
 
-	color: RGB($secondary)
+			background-color: RGB($darkBlue)
+			color: RGB($white)
 
-	> span
-		padding: 0 0.1rem
+			&:focus
+				outline: none
+				border-color: RGB($primary)
 
-		color: transparent
-		background: RGB($secondary)
+			&.error
+				border-color: RGB($secondary)
 
-nav
-	margin: 0
-	padding: 0
+		> button
+			margin: 0
+			padding: 0.75rem 1rem
 
-	height: 3rem
+			font-weight: bolder
 
-	display: flex
-	flex-direction: row
-	justify-content: center
+			border: transparent
+			border-radius: 2px
 
-	> span
-		width: 100%
-
-	> a
-		margin: auto 0.25rem
-		padding: 0.5rem 1rem
-
-		text-decoration: none
-		white-space: nowrap
-
-		color: RGB($primary)
-
-		&.button
-			@include button($white)
-
-			&.primary
-				@include button($primary)
-
-			&.secondary
-				@include button($secondary)
-
-form
-	display: flex
-	flex-direction: column
-
-	> input
-		margin: 0 0 1rem 0
-		padding: 0.5rem 1rem
-
-		border: 1px solid RGB($white)
-		border-radius: 2px
-
-		background-color: RGB($darkBlue)
-		color: RGB($white)
-
-		&:focus
-			outline: none
-			border-color: RGB($primary)
-
-		&.error
-			border-color: RGB($secondary)
-
-	> button
-		margin: 0
-		padding: 0.5rem 1rem
-
-		font-weight: bolder
-
-		border: transparent
-		border-radius: 2px
-
-		background-color: RGB($primary)
-		color: RGB($black)
-
-		&:focus-visible, &:hover
-			outline: none
-			background-color: RGBA($primary, 0.3)
-			color: RGB($primary)
-
-		&.disabled
-			pointer-events: none
-			opacity: 0.5
-
-		&.secondary
-			background-color: RGB($secondary)
+			background-color: RGB($primary)
 			color: RGB($black)
 
 			&:focus-visible, &:hover
-				background-color: RGBA($secondary, 0.3)
-				color: RGB($secondary)
+				outline: none
+				background-color: RGBA($primary, 0.3)
+				color: RGB($primary)
+
+			&.disabled
+				pointer-events: none
+				opacity: 0.5
+
+			&.secondary
+				background-color: RGB($secondary)
+				color: RGB($black)
+
+				&:focus-visible, &:hover
+					background-color: RGBA($secondary, 0.3)
+					color: RGB($secondary)
+
+footer
+	padding: 0.5rem 1rem
+	width: 100%
+	display: flex
+	flex-direction: row
+	background-color: RGBA($darkBlue, 0.7)
+
+	> p
+		margin: 0
+		width: 100%
+		text-align: center
+		font-size: 0.8em
+		white-space: nowrap
+		color: RGB($white)
+
+		> a
+			color: RGB($secondary)
+			text-decoration: none
+
+			&:hover
+				text-decoration: underline

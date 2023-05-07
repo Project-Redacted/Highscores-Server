@@ -12,20 +12,39 @@
 <body>
     <img src="{{ url_for("static", filename="bg.png") }}" alt="The Front Rooms pause menu" class="background">
     <div class="app">
-        <img src="{{ url_for("static", filename="title.png") }}" alt="The Front Rooms logo" class="title">
-        <nav>
-            <a href="{{ url_for('views.index', diff=0) }}" class="button">Level 1</a>
-            <a href="{{ url_for('views.index', diff=1) }}" class="button">Level 2</a>
-            <a href="{{ url_for('views.index', diff=2) }}" class="button">Level 3</a>
-            <a href="{{ url_for('views.index', diff=3) }}" class="button">Normal</a>
-            <a href="{{ url_for('views.index', diff=4) }}" class="button">Hard</a>
+        <header>
+            <img src="{{ url_for("static", filename="title.png") }}" alt="The Front Rooms logo" class="title" height="60px">
+            <nav>
+                <a href="{{ url_for('views.index', diff=0) }}" class="button">Level 1</a>
+                <a href="{{ url_for('views.index', diff=1) }}" class="button">Level 2</a>
+                <a href="{{ url_for('views.index', diff=2) }}" class="button">Level 3</a>
+                <a href="{{ url_for('views.index', diff=3) }}" class="button">Normal</a>
+                <a href="{{ url_for('views.index', diff=4) }}" class="button">Hard</a>
 
-            <span></span> <!-- This is a spacer -->
+                <span></span> <!-- This is a spacer -->
 
-            <a href="{{ url_for('auth.auth') }}" class="button secondary">Login</a>
-        </nav>
-    
-        {% block content %}{% endblock %}
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.account') }}" class="button secondary">Account</a>
+                {% else %}
+                    <a href="{{ url_for('auth.auth') }}" class="button secondary">Login</a>
+                {% endif %}
+            </nav>
+        </header>
+
+        <!-- This is where the flash messages will be displayed -->
+        <div class="flash">
+            {% for message in get_flashed_messages() %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer>
+            <p>By Project Redacted | <a href="https://github.com/Fluffy-Bean/GameExpo23">Server Source</a></p>
+        </footer>
     </div>
 </body>
 </html>
