@@ -1,4 +1,5 @@
 import re
+import uuid
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, login_user, logout_user, current_user
@@ -19,6 +20,17 @@ def auth():
 @blueprint.route('/account', methods=['GET'])
 @login_required
 def account():
+    action = request.args.get('action', None)
+
+    if action == "logout":
+        logout_user()
+        flash("Successfully logged out!", "success")
+        return redirect(url_for("views.index"))
+    if action == "delete":
+        flash("Insert delete function", "error")
+    if action == "password":
+        flash("Insert password change function", "error")
+
     token_list = Tokens.query.filter_by(holder=current_user.id).all()
     return render_template('account.html', token_list=token_list)
 
@@ -48,7 +60,11 @@ def register():
             flash(err, "error")
         return redirect(url_for("auth.auth"))
 
-    register_user = Users(username=username, password=generate_password_hash(password, method="scrypt"))
+    register_user = Users(
+        alt_id=str(uuid.uuid4()),
+        username=username,
+        password=generate_password_hash(password, method="scrypt")
+    )
     db.session.add(register_user)
     db.session.commit()
 
@@ -81,11 +97,5 @@ def login():
         return redirect(url_for("auth.account"))
 
     login_user(user, remember=True)
-    return redirect(url_for("views.index"))
-
-
-@blueprint.route('/logout', methods=['GET'])
-@login_required
-def logout():
-    logout_user()
+    flash("Successfully logged in!", "success")
     return redirect(url_for("views.index"))

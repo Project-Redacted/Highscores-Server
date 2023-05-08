@@ -5,7 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Front Rooms Highscores</title>
+
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    {% assets "scripts" %}
+        <script src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
     {% assets "styles" %}
         <link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css">
     {% endassets %}
@@ -13,10 +19,24 @@
 <body>
     <img src="{{ url_for('static', filename='bg.png') }}" alt="The Front Rooms pause menu" class="background">
     <div class="app">
+        <!-- Get flashed lol -->
+        <div class="flash">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p class="{{ category }}" onclick="this.remove()">
+                        <span><i class="ph-bold ph-x"></i></span>
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        </div>
+
         <header>
             <img src="{{ url_for('static', filename='title.png') }}" alt="The Front Rooms logo" class="title" height="60px">
             <nav>
-                <a href="{{ url_for('views.index') }}" class="button"><i class="ph ph-house"></i></a>
+                <a href="{{ url_for('views.index') }}" class="button">Scores</a>
                 <a href="{{ url_for('views.about') }}" class="button"><i class="ph ph-info"></i></a>
                 <a href="#" class="button"><i class="ph ph-download-simple"></i></a>
 
@@ -33,13 +53,6 @@
             <!-- Secondary nav bar for page specific content -->
             {% block nav %}{% endblock %}
         </header>
-
-        <!-- This is where the flash messages will be displayed -->
-        <div class="flash">
-            {% for message in get_flashed_messages() %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        </div>
 
         <main>
             {% block content %}{% endblock %}

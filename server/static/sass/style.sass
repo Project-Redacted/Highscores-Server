@@ -12,6 +12,7 @@ $darkBlue: var(--darkBlue)
 	background-color: RGBA($color, 0.02)
 	color: RGB($color)
 	border-radius: 2px
+	border: 0 solid transparent
 	transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out
 
 	&:hover
@@ -23,7 +24,7 @@ $darkBlue: var(--darkBlue)
 \:root
 	--black: 21, 21, 21
 	--white: 232, 227, 227
-	--primary: 213, 214, 130
+	--primary: 210, 206, 97
 	--secondary: 185, 77, 77
 	--gold: 255, 222, 70
 	--silver: 229, 220, 206
@@ -66,6 +67,7 @@ body
 	flex-direction: column
 
 	background-color: rgba($darkBlue, 0.7)
+	backdrop-filter: blur(5px)
 	z-index: 2
 
 	> table
@@ -95,7 +97,7 @@ nav
 
 	> a
 		margin: auto 0.15rem
-		padding: 0.5rem 1rem
+		padding: 0.5rem 0.7rem
 
 		text-decoration: none
 		white-space: nowrap
@@ -123,15 +125,63 @@ nav
 	align-items: center
 
 	> p
-		margin: 0.4rem 0 0
+		margin: 0
 		padding: 0.75rem 1rem
 
 		width: 100%
 		position: relative
 
-		border-left: RGB($secondary) 0.25rem solid
 		background-color: RGB($darkBlue)
-		color: RGB($secondary)
+		color: RGB($primary)
+
+		transition: background-color 0.2s ease-in-out, padding 0.2s ease-in-out
+
+		> span
+			position: absolute
+			top: 0
+			left: 0
+			bottom: 0
+			width: 0.25rem
+
+			display: flex
+			justify-content: center
+			align-items: center
+
+			background-color: RGB($primary)
+			color: transparent
+
+			overflow: hidden
+			transition: width 0.2s ease-in-out, color 0.2s ease-in-out, background-color 0.2s ease-in-out
+
+			> i
+				font-size: 1.25em
+
+		&:hover
+			padding: 0.75rem 1rem 0.75rem 4rem
+			background-color: RGBA($primary, 0.1)
+			cursor: pointer
+
+			> span
+				width: 3rem
+				color: RGB($black)
+
+		&.success
+			color: RGB($primary)
+
+			> span
+				background-color: RGB($primary)
+
+			&:hover
+				background-color: RGBA($primary, 0.1)
+
+		&.error
+			color: RGB($secondary)
+
+			> span
+				background-color: RGB($secondary)
+
+			&:hover
+				background-color: RGBA($secondary, 0.1)
 
 main
 	padding: 1rem
@@ -139,6 +189,11 @@ main
 
 	display: flex
 	flex-direction: column
+
+	> h2
+		margin: 0 0 1rem 0
+		font-size: 1.5em
+		color: RGB($white)
 
 	.center-text
 		height: 100%
@@ -160,7 +215,13 @@ main
 			font-size: 1em
 			color: RGB($white)
 
-	.auth
+		> img
+			margin: 1rem auto 0
+			max-width: 100%
+			max-height: 15rem
+			border-radius: 2px
+
+	.block
 		margin-bottom: 1rem
 		padding: 1rem
 
@@ -171,9 +232,60 @@ main
 		border-radius: 2px
 
 		> h2
-			margin: 0 0 1rem 0
+			margin: 0 0 0.2rem 0
 			font-size: 1.3em
 			color: RGB($white)
+
+		> p
+			margin: 0 0 1rem 0
+			font-size: 1em
+
+		.button
+			margin: 0
+			padding: 0.5rem 0.7rem
+
+			text-decoration: none
+			white-space: nowrap
+			font-size: 0.9em
+
+			color: RGB($primary)
+
+			> i
+				font-size: 1.25em
+				display: block
+
+			@include button($white)
+
+			&.primary
+				@include button($primary)
+
+			&.secondary
+				@include button($secondary)
+
+		> table
+			width: 100%
+			border-collapse: collapse
+			> tbody > tr > td
+				padding: 0 0.5rem 0.5rem 0
+
+				text-align: left
+				font-size: 0.9em
+
+				color: RGB($white)
+
+				transition: filter 0.2s ease-in-out
+
+				&:last-child
+					width: 100%
+
+				&.hidden
+					filter: blur(5px)
+
+		&.secondary
+			border: 1px solid RGB($secondary)
+
+			> h2
+				color: RGB($secondary)
 
 	form
 		display: flex
@@ -181,7 +293,7 @@ main
 
 		> input
 			margin: 0 0 1rem 0
-			padding: 0.75rem 1rem
+			padding: 0.7rem 1rem
 
 			border: 1px solid RGB($white)
 			border-radius: 2px

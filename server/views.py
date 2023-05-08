@@ -3,8 +3,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired
 
-from server.models import Scores, Users, Tokens
-from server.extensions import db, cache
+from server.models import Scores, Tokens
+from server.extensions import db
 from server.config import BEARER_TOKEN
 
 

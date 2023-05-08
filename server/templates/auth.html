@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="auth">
+    <div class="block">
         <h2>Login</h2>
+        <p>Welcome back!</p>
         <form action="{{ url_for('auth.login') }}" method="POST">
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
@@ -9,8 +10,9 @@
         </form>
     </div>
 
-    <div class="auth">
+    <div class="block">
         <h2>Register</h2>
+        <p>Don't have an account? Register here!</p>
         <form action="{{ url_for('auth.register') }}" method="POST">
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>

@@ -1,7 +1,7 @@
 """
 Database models for the server
 """
-from uuid import uuid4
+import uuid
 from flask_login import UserMixin
 from server.extensions import db
 
@@ -37,7 +37,7 @@ class Users(db.Model, UserMixin):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    alt_id = db.Column(db.String, nullable=False, unique=True, default=str(uuid4()))
+    alt_id = db.Column(db.String, nullable=False, unique=True)
 
     username = db.Column(db.String(32), unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
@@ -62,7 +62,7 @@ class Tokens(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     holder = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    token = db.Column(db.String, nullable=False, unique=True, default=str(uuid4()))
+    token = db.Column(db.String, nullable=False, unique=True)
     created_at = db.Column(
         db.DateTime,
         nullable=False,
