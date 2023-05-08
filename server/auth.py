@@ -1,11 +1,11 @@
 import re
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from flask_login import current_user, login_required
-from werkzeug.security import generate_password_hash
+from flask_login import login_required, login_user, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 
-from server.extensions import cache, login_manager, db
-from server.models import Users
+from server.extensions import db
+from server.models import Users, Tokens
 
 
 blueprint = Blueprint('auth', __name__)
@@ -15,10 +15,12 @@ blueprint = Blueprint('auth', __name__)
 def auth():
     return render_template('auth.html')
 
+
 @blueprint.route('/account', methods=['GET'])
 @login_required
 def account():
-    return render_template('account.html')
+    token_list = Tokens.query.filter_by(holder=current_user.id).all()
+    return render_template('account.html', token_list=token_list)
 
 
 @blueprint.route('/register', methods=['POST'])
@@ -46,11 +48,44 @@ def register():
             flash(err, "error")
         return redirect(url_for("auth.auth"))
 
-    register_user = Users(
-        username=username,
-        password=generate_password_hash(password, method="sha256"),
-    )
+    register_user = Users(username=username, password=generate_password_hash(password, method="scrypt"))
     db.session.add(register_user)
     db.session.commit()
 
-    return redirect(url_for("view.index"))
+    flash("Successfully registered!", "success")
+    return redirect(url_for("auth.auth"))
+
+
+@blueprint.route('/login', methods=['POST'])
+def login():
+    # Get the form data
+    username = request.form["username"].strip()
+    password = request.form["password"].strip()
+    username_regex = re.compile(r"\b[A-Za-z0-9._-]+\b")
+
+    error = []
+
+    # Validate the form
+    if not username or not username_regex.match(username) or not password:
+        error.append("Username or Password is incorrect!")
+
+    user = Users.query.filter_by(username=username).first()
+
+    if not user or not check_password_hash(user.password, password):
+        error.append("Username or Password is incorrect!")
+
+    # If there are errors, return them
+    if error:
+        for err in error:
+            flash(err, "error")
+        return redirect(url_for("auth.account"))
+
+    login_user(user, remember=True)
+    return redirect(url_for("views.index"))
+
+
+@blueprint.route('/logout', methods=['GET'])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("views.index"))

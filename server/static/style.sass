@@ -9,16 +9,14 @@ $darkBlue: var(--darkBlue)
 
 @mixin button($color)
 	text-decoration: none
-	background-color: transparent
+	background-color: RGBA($color, 0.02)
 	color: RGB($color)
 	border-radius: 2px
-	// box-shadow: 0 0 0 0 RGBA($color, 0)
-	transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out
+	transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out
 
 	&:hover
 		background-color: RGBA($color, 0.3)
 		transform: translateY(-0.1rem)
-		// box-shadow: 0 0.1rem 0.4rem 0.1rem RGBA($color, 0.2)
 
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&display=swap')
 
@@ -79,41 +77,44 @@ header
 	background-color: RGBA($darkBlue, 0.7)
 
 	> img
-		margin-bottom: 2rem
+		margin-bottom: 1rem
 		width: 100%
 		height: auto
 		text-align: center
 
-	> nav
-		margin: 0
-		padding: 0
+nav
+	margin-top: 0.3rem
+	padding: 0
 
-		height: 3rem
+	display: flex
+	flex-direction: row
+	justify-content: center
 
-		display: flex
-		flex-direction: row
-		justify-content: center
+	> span
+		width: 100%
 
-		> span
-			width: 100%
+	> a
+		margin: auto 0.15rem
+		padding: 0.5rem 1rem
 
-		> a
-			margin: auto 0.25rem
-			padding: 0.5rem 1rem
+		text-decoration: none
+		white-space: nowrap
+		font-size: 0.9em
 
-			text-decoration: none
-			white-space: nowrap
+		color: RGB($primary)
 
-			color: RGB($primary)
+		&.button
+			@include button($white)
 
-			&.button
-				@include button($white)
+			&.primary
+				@include button($primary)
 
-				&.primary
-					@include button($primary)
+			&.secondary
+				@include button($secondary)
 
-				&.secondary
-					@include button($secondary)
+		> i
+			font-size: 1.25em
+			display: block
 
 .flash
 	display: flex
@@ -160,7 +161,7 @@ main
 			color: RGB($white)
 
 	.auth
-		margin: auto 0
+		margin-bottom: 1rem
 		padding: 1rem
 
 		display: flex

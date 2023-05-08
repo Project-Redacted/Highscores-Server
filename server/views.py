@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, render_template
+from flask import Blueprint, request, render_template
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired
@@ -20,7 +20,7 @@ class ScoreForm(FlaskForm):
 
 
 @blueprint.route('/')
-@cache.cached(timeout=60)
+# @cache.cached(timeout=60)
 def index():
     difficulty = request.args.get('diff', 0)
 
@@ -30,6 +30,11 @@ def index():
                   .limit(10)
                   .all())
     return render_template('scores.html', top_scores=top_scores)
+
+
+@blueprint.route('/about')
+def about():
+    return render_template('about.html')
 
 
 

@@ -2,6 +2,7 @@
 Database models for the server
 """
 from uuid import uuid4
+from flask_login import UserMixin
 from server.extensions import db
 
 
@@ -19,17 +20,17 @@ class Scores(db.Model):
     username = db.Column(db.String(32), nullable=True)
 
     score = db.Column(db.Float, nullable=False)
-    difficulty = db.Column(db.String, nullable=False)
+    difficulty = db.Column(db.Integer, nullable=False)
     scored_at = db.Column(
         db.DateTime,
         nullable=False,
-        server_default=db.func.utcnow(),
+        server_default=db.func.now(),
     )
 
     scorer = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 
 
-class Users(db.Model):
+class Users(db.Model, UserMixin):
     """
     User table
     """
@@ -39,12 +40,11 @@ class Users(db.Model):
     alt_id = db.Column(db.String, nullable=False, unique=True, default=str(uuid4()))
 
     username = db.Column(db.String(32), unique=True, nullable=False)
-    email = db.Column(db.String, unique=True, nullable=False)
-    password = db.Column(db.String(128), nullable=False)
+    password = db.Column(db.String, nullable=False)
     joined_at = db.Column(
         db.DateTime,
         nullable=False,
-        server_default=db.func.utcnow(),  # pylint: disable=E1102
+        server_default=db.func.now(),
     )
 
     scores = db.relationship('Scores', backref='user', lazy=True)
@@ -61,10 +61,10 @@ class Tokens(db.Model):
     __tablename__ = "tokens"
 
     id = db.Column(db.Integer, primary_key=True)
+    holder = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     token = db.Column(db.String, nullable=False, unique=True, default=str(uuid4()))
     created_at = db.Column(
         db.DateTime,
         nullable=False,
-        server_default=db.func.utcnow(),  # pylint: disable=E1102
+        server_default=db.func.now(),
     )
-    holder = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

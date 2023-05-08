@@ -1,4 +1,16 @@
 {% extends "base.html" %}
+{% block nav %}
+<nav>
+    <a href="{{ url_for('views.index', diff=0) }}" class="button">Level 1</a>
+    <a href="{{ url_for('views.index', diff=1) }}" class="button">Level 2</a>
+    <a href="{{ url_for('views.index', diff=2) }}" class="button">Level 3</a>
+    <a href="{{ url_for('views.index', diff=3) }}" class="button">Normal</a>
+    <a href="{{ url_for('views.index', diff=4) }}" class="button">Hard</a>
+
+    <!-- This is a spacer -->
+    <span></span>
+</nav>
+{% endblock %}
 {% block content %}
     {% if scores %}
         <table>
